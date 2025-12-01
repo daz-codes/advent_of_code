@@ -13,15 +13,33 @@ R14
 L82
 `
 
-const instructions = data.trim().split("\n")
-let dial = 50
 
-const answer = instructions.map(instruction => {
-  const left = instruction.first.eql("L")
-  const [full_turns,change] = (instruction.slice(1).to_i).divmod(100)
-  const passed_zero = dial.nonzero && left ? change >= dial : change >= (100 - dial)
-  dial = (dial + (left ? 100 - change : change)).mod(100)
-  return full_turns + (passed_zero ? 1 : 0)
-}).sum
+const day1 = data => {
+  const instructions = data.trim().split("\n")
+  let dial_value = 50
 
-console.log(answer)
+  const part_turn_goes_past_zero = (amount_turned,dir) =>
+      dial_value.isNonzero && dir.eql("L")
+        ? amount_turned >= dial_value
+        : amount_turned >= (100 - dial_value)
+
+  const update_dial = (dial_value,amount_turned,dir) =>
+      (dial_value + (dir.eql("L") 
+         ? 100 - amount_turned 
+         : amount_turned)
+      ).mod(100)
+
+  const total_times_past_zero = instructions.inject((sum,instruction) => {
+    const [dir,steps] = [instruction.first,instruction.slice(1).to_i]
+    const [full_turns,amount_turned] = steps.divmod(100)
+    sum += full_turns
+    if(part_turn_goes_past_zero(amount_turned,dir)) sum += 1
+    dial_value = update_dial(dial_value,amount_turned,dir)
+    return sum
+  },0)
+  
+  return total_times_past_zero
+}
+
+
+console.log(day1(data))
