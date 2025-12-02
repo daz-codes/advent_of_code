@@ -26,7 +26,7 @@ const day1 = data => {
       (dial_value + (dir.eql("L") 
          ? 100 - amount_turned 
          : amount_turned)
-      ).mod(100)
+      ).modulo(100)
 
   const total_times_past_zero = instructions.inject((sum,instruction) => {
     const [dir,steps] = [instruction.first,instruction.slice(1).to_i]
