@@ -13,22 +13,28 @@ R14
 L82
 `
 
+const DIAL_SIZE = 100
+const START_POSITION = 50
+
 const day1 = data => {
   const instructions = data.trim().split("\n")
-  let dial_value = 50
+  let dial_value = START_POSITION
 
   const part_turn_goes_past_zero = (amount_turned,dir) =>
       dial_value.isNonzero && dir.eql("L")
         ? amount_turned >= dial_value
-        : amount_turned >= (100 - dial_value)
+        : amount_turned >= (DIAL_SIZE - dial_value)
 
   const total_times_past_zero = instructions.inject((sum,instruction) => {
+    // grab the values
     const [dir,steps] = [instruction.first,instruction.slice(1).to_i]
-    const [full_turns,amount_turned] = steps.divmod(100)
+    const [full_turns,amount_turned] = steps.divmod(DIAL_SIZE)
+    // update the sum
     sum += full_turns
     if(part_turn_goes_past_zero(amount_turned,dir)) sum += 1
-    dial_value += dir.eql("L") ? 100 - amount_turned : amount_turned
-    dial_value %= 100
+    // update the dial value
+    dial_value += dir.eql("L") ? DIAL_SIZE - amount_turned : amount_turned
+    dial_value %= DIAL_SIZE
     return sum
   },0)
   
