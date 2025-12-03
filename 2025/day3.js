@@ -7,12 +7,14 @@ const data = `
 818181911112111
 `
 
+const NUMBER_OF_BATTERIES = 12
+
 const day3 = data => {
   const banks = data.trim().split("\n").map(x => x.split``)
   const joltage = banks.inject((sum,bank) =>{
-    const subtotal = (1).upto(11).reverse().inject((subtotal,n) => {
+    const subtotal = NUMBER_OF_BATTERIES.pred.downto(1).inject((subtotal,n) => {
       const max = bank.slice(0,-n).max
-      const index = bank.findIndex(x => x == max)
+      const index = bank.findIndex($`eql(max)`)
       bank.splice(0,index.next)
       return subtotal + max * 10 ** n
     },0)
