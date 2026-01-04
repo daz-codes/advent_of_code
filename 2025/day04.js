@@ -26,14 +26,14 @@ let total_rolls_removed = 0
 const day4 = data => {
   let diagram = data.trim().split("\n").map(x => x.split``)
   while("rolling") {
-    const rolls_removed = diagram.inject((sum,row,i) => {
+    const rolls_removed = diagram.count((row,i) => {
       const rolls_removed_from_row = row.inject((sum,roll,j) => {
         if(roll != "@") return sum
         const adjacents = adjacent_cells(diagram,i,j)
         const count = adjacents.count(roll => roll =="@" || roll =="!")
         if(count < NUMBER_OF_EMPTIES) diagram[i][j] = "!"
-        return sum + (count < NUMBER_OF_EMPTIES ? 1 : 0)
-      },0)
+        return count < NUMBER_OF_EMPTIES
+      })
     return sum + rolls_removed_from_row
   },0)
   total_rolls_removed += rolls_removed
